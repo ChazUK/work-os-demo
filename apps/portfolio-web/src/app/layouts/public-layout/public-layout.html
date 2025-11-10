@@ -1,0 +1,16 @@
+<header>
+  <nav class="container">
+    <a routerLink="/">Portfolio</a>
+    <a routerLink="/">Home</a>
+    <a routerLink="/about">About</a>
+    <a [href]="(loginUrl$ | async)?.url">Login</a>
+  </nav>
+</header>
+
+<main class="container">
+  <router-outlet />
+</main>
+
+<footer>
+  <p class="container">&copy; 2024 Portfolio. Premium Landlord Property Management Platform by NRLA</p>
+</footer>

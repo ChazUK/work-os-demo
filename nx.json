@@ -55,6 +55,9 @@
         "style": "tailwind",
         "linter": "none"
       }
+    },
+    "@nx/angular:component": {
+      "style": "css"
     }
   },
   "plugins": [
