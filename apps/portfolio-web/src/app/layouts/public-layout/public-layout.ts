@@ -2,11 +2,10 @@ import { Component, inject } from '@angular/core';
 import { RouterOutlet, RouterLink } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
 import { Observable } from 'rxjs';
-import { AsyncPipe } from '@angular/common';
 
 @Component({
   selector: 'app-public-layout',
-  imports: [RouterOutlet, RouterLink, AsyncPipe],
+  imports: [RouterOutlet, RouterLink],
   templateUrl: './public-layout.html',
   styleUrl: './public-layout.css',
 })

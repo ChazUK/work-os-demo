@@ -1,1 +1,198 @@
-<p>dashboard works!</p>
+<div class="dashboard">
+  <!-- Header -->
+  <section class="dashboard-header">
+    <div class="container">
+      <h1 class="page-title">Dashboard</h1>
+      <p class="page-subtitle">Overview of your property portfolio</p>
+    </div>
+  </section>
+
+  <!-- Key Metrics -->
+  <section class="metrics-section">
+    <div class="container">
+      <div class="metrics-grid">
+        <div class="metric-card">
+          <div class="metric-icon properties-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+              <polyline points="9 22 9 12 15 12 15 22"></polyline>
+            </svg>
+          </div>
+          <div class="metric-content">
+            <div class="metric-value">{{ metrics.totalProperties }}</div>
+            <div class="metric-label">Total Properties</div>
+            <div class="metric-detail">{{ occupancyRate }}% occupied</div>
+          </div>
+        </div>
+
+        <div class="metric-card">
+          <div class="metric-icon tenancies-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+              <circle cx="9" cy="7" r="4"></circle>
+              <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+              <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+            </svg>
+          </div>
+          <div class="metric-content">
+            <div class="metric-value">{{ metrics.activeTenancies }}</div>
+            <div class="metric-label">Active Tenancies</div>
+            <div class="metric-detail">{{ metrics.vacantProperties }} vacant</div>
+          </div>
+        </div>
+
+        <div class="metric-card">
+          <div class="metric-icon revenue-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="12" y1="1" x2="12" y2="23"></line>
+              <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path>
+            </svg>
+          </div>
+          <div class="metric-content">
+            <div class="metric-value">{{ formatCurrency(metrics.totalMonthlyRent) }}</div>
+            <div class="metric-label">Monthly Rent</div>
+            <div class="metric-detail">Expected income</div>
+          </div>
+        </div>
+
+        <div class="metric-card alert-card">
+          <div class="metric-icon arrears-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path>
+              <line x1="12" y1="9" x2="12" y2="13"></line>
+              <line x1="12" y1="17" x2="12.01" y2="17"></line>
+            </svg>
+          </div>
+          <div class="metric-content">
+            <div class="metric-value">{{ formatCurrency(metrics.totalArrears) }}</div>
+            <div class="metric-label">Total Arrears</div>
+            <div class="metric-detail">{{ propertiesWithArrears.length }} properties affected</div>
+          </div>
+        </div>
+
+        <div class="metric-card">
+          <div class="metric-icon compliance-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+            </svg>
+          </div>
+          <div class="metric-content">
+            <div class="metric-value">{{ metrics.expiringCertificates }}</div>
+            <div class="metric-label">Expiring Certificates</div>
+            <div class="metric-detail">Action required</div>
+          </div>
+        </div>
+
+        <div class="metric-card">
+          <div class="metric-icon maintenance-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"></path>
+            </svg>
+          </div>
+          <div class="metric-content">
+            <div class="metric-value">{{ metrics.maintenanceIssues }}</div>
+            <div class="metric-label">Maintenance Issues</div>
+            <div class="metric-detail">Open requests</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Alerts Section -->
+  <section class="alerts-section" *ngIf="propertiesWithArrears.length > 0 || upcomingInspections.length > 0">
+    <div class="container">
+      <div class="alerts-grid">
+        <!-- Arrears Alert -->
+        <div class="alert-panel" *ngIf="propertiesWithArrears.length > 0">
+          <div class="alert-header">
+            <h3 class="alert-title">Properties with Arrears</h3>
+            <span class="alert-badge">{{ propertiesWithArrears.length }}</span>
+          </div>
+          <div class="alert-list">
+            <div class="alert-item" *ngFor="let property of propertiesWithArrears">
+              <div class="alert-item-content">
+                <div class="alert-item-title">{{ property.address }}</div>
+                <div class="alert-item-subtitle">{{ property.tenant }}</div>
+              </div>
+              <div class="alert-item-value arrears-value">{{ formatCurrency(property.arrears) }}</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Upcoming Inspections -->
+        <div class="alert-panel" *ngIf="upcomingInspections.length > 0">
+          <div class="alert-header">
+            <h3 class="alert-title">Upcoming Inspections</h3>
+            <span class="alert-badge">{{ upcomingInspections.length }}</span>
+          </div>
+          <div class="alert-list">
+            <div class="alert-item" *ngFor="let property of upcomingInspections">
+              <div class="alert-item-content">
+                <div class="alert-item-title">{{ property.address }}</div>
+                <div class="alert-item-subtitle">{{ property.tenant || 'Vacant' }}</div>
+              </div>
+              <div class="alert-item-value">{{ formatDate(property.nextInspection) }}</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Properties List -->
+  <section class="properties-section">
+    <div class="container">
+      <div class="section-header">
+        <h2 class="section-title">Your Properties</h2>
+        <button class="btn btn-primary">Add Property</button>
+      </div>
+
+      <div class="properties-table-container">
+        <table class="properties-table">
+          <thead>
+            <tr>
+              <th>Address</th>
+              <th>Type</th>
+              <th>Tenant</th>
+              <th>Status</th>
+              <th>Monthly Rent</th>
+              <th>Arrears</th>
+              <th>Compliance</th>
+              <th>Next Inspection</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let property of properties" class="property-row">
+              <td class="property-address">
+                <div class="address-main">{{ property.address.split(',')[0] }}</div>
+                <div class="address-detail">{{ property.address.split(',').slice(1).join(',').trim() }}</div>
+              </td>
+              <td>{{ property.type }}</td>
+              <td>
+                <span *ngIf="property.tenant">{{ property.tenant }}</span>
+                <span *ngIf="!property.tenant" class="text-muted">—</span>
+              </td>
+              <td>
+                <span class="status-badge" [ngClass]="getStatusBadgeClass(property.tenancyStatus)">
+                  {{ property.tenancyStatus }}
+                </span>
+              </td>
+              <td class="text-bold">{{ formatCurrency(property.monthlyRent) }}</td>
+              <td>
+                <span *ngIf="property.arrears > 0" class="arrears-amount">{{ formatCurrency(property.arrears) }}</span>
+                <span *ngIf="property.arrears === 0" class="text-muted">—</span>
+              </td>
+              <td>
+                <span class="status-badge" [ngClass]="getStatusBadgeClass(property.complianceStatus)">
+                  {{ property.complianceStatus }}
+                </span>
+              </td>
+              <td>{{ formatDate(property.nextInspection) }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+</div>
