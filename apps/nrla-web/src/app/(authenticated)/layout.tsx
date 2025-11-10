@@ -29,7 +29,7 @@ export default async function UnauthenticatedLayout({
         await signOut();
       }}
     >
-          <span className="font-bold tracking-wide text-blue-400">NRLA</span>
+          <Link href="/" className="font-bold tracking-wide text-blue-400">NRLA</Link>
           <nav className="flex gap-3.5">
             <Link
               href="/dashboard"

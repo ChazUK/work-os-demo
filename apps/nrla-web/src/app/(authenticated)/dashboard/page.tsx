@@ -1,4 +1,5 @@
 import { withAuth } from '@workos-inc/authkit-nextjs';
+import Link from 'next/link';
 
 export default async function DashboardPage() {
   const { user } = await withAuth();
@@ -19,9 +20,9 @@ export default async function DashboardPage() {
             <h2 className="text-2xl font-bold text-white mb-1">Portfolio Overview</h2>
             <p className="text-sm text-gray-400">Your property management statistics</p>
           </div>
-          <button className="text-sm text-blue-400 hover:text-blue-300 transition-colors">
+          <Link href="http://portfolio-web.test/dashboard" className="text-sm text-blue-400 hover:text-blue-300 transition-colors">
             View Full Portfolio →
-          </button>
+          </Link>
         </div>
 
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
@@ -249,9 +250,9 @@ export default async function DashboardPage() {
 
         <div className="grid md:grid-cols-3 gap-4">
           {/* B&Q */}
-          <a 
-            href="https://www.diy.com" 
-            target="_blank" 
+          <a
+            href="https://www.diy.com"
+            target="_blank"
             rel="noopener noreferrer"
             className="bg-slate-800/50 border border-slate-700 rounded-lg p-5 hover:border-orange-500/50 transition-colors group"
           >
@@ -274,9 +275,9 @@ export default async function DashboardPage() {
           </a>
 
           {/* Screwfix */}
-          <a 
-            href="https://www.screwfix.com" 
-            target="_blank" 
+          <a
+            href="https://www.screwfix.com"
+            target="_blank"
             rel="noopener noreferrer"
             className="bg-slate-800/50 border border-slate-700 rounded-lg p-5 hover:border-blue-500/50 transition-colors group"
           >
@@ -301,9 +302,9 @@ export default async function DashboardPage() {
           </a>
 
           {/* Toolstation */}
-          <a 
-            href="https://www.toolstation.com" 
-            target="_blank" 
+          <a
+            href="https://www.toolstation.com"
+            target="_blank"
             rel="noopener noreferrer"
             className="bg-slate-800/50 border border-slate-700 rounded-lg p-5 hover:border-purple-500/50 transition-colors group"
           >
@@ -328,9 +329,9 @@ export default async function DashboardPage() {
           </a>
 
           {/* Wickes */}
-          <a 
-            href="https://www.wickes.co.uk" 
-            target="_blank" 
+          <a
+            href="https://www.wickes.co.uk"
+            target="_blank"
             rel="noopener noreferrer"
             className="bg-slate-800/50 border border-slate-700 rounded-lg p-5 hover:border-green-500/50 transition-colors group"
           >
@@ -355,9 +356,9 @@ export default async function DashboardPage() {
           </a>
 
           {/* Homebase */}
-          <a 
-            href="https://www.homebase.co.uk" 
-            target="_blank" 
+          <a
+            href="https://www.homebase.co.uk"
+            target="_blank"
             rel="noopener noreferrer"
             className="bg-slate-800/50 border border-slate-700 rounded-lg p-5 hover:border-yellow-500/50 transition-colors group"
           >
@@ -382,9 +383,9 @@ export default async function DashboardPage() {
           </a>
 
           {/* Travis Perkins */}
-          <a 
-            href="https://www.travisperkins.co.uk" 
-            target="_blank" 
+          <a
+            href="https://www.travisperkins.co.uk"
+            target="_blank"
             rel="noopener noreferrer"
             className="bg-slate-800/50 border border-slate-700 rounded-lg p-5 hover:border-red-500/50 transition-colors group"
           >
