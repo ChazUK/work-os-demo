@@ -49,6 +49,9 @@
     "serve": {
       "continuous": true,
       "executor": "@angular/build:dev-server",
+      "options": {
+        "allowedHosts": ["portfolio-web.test"]
+      },
       "configurations": {
         "production": {
           "buildTarget": "portfolio-web:build:production"
