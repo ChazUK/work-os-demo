@@ -1,22 +1,42 @@
-import { DOCUMENT, inject, Injectable } from "@angular/core";
-import { CanActivate, CanActivateChild, } from "@angular/router";
-
+import { inject, Injectable } from '@angular/core';
+import { CanActivate, CanActivateChild, Router } from '@angular/router';
+import { catchError, map, of, switchMap, take } from 'rxjs';
+import { AuthService } from '../services/auth.service';
 
 @Injectable({ providedIn: 'root' })
 export class IsAuthenticatedGuard implements CanActivate, CanActivateChild {
-  private document = inject(DOCUMENT);
+  private router = inject(Router);
+  private authService = inject(AuthService);
 
-  canActivate(): boolean {
-    return this.checkAuth();
+  canActivate() {
+    return this.checkAuth().pipe(take(1));
   }
 
-  canActivateChild(): boolean {
-    return this.checkAuth();
+  canActivateChild() {
+    return this.checkAuth().pipe(take(1));
   }
 
-  private checkAuth(): boolean {
-    this.document.location.href = 'https://portfolio-api.test/auth/login';
+  private checkAuth() {
+    return this.authService.user$.pipe(
+      take(1),
+      switchMap((user) => {
+        if (user !== null) return of(!!user);
 
-    return false;
+        return this.authService.checkAuth().pipe(map((user) => !!user));
+      }),
+      map((isAuthenticated) => {
+        if (isAuthenticated) return true;
+
+        this.router.navigate(['/login']);
+
+        return false;
+      }),
+      catchError((error) => {
+        console.log({ error });
+        this.router.navigate(['/login']);
+
+        return of(false);
+      }),
+    );
   }
 }

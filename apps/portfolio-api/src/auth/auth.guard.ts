@@ -1,7 +1,7 @@
 import {
-  Injectable,
   CanActivate,
   ExecutionContext,
+  Injectable,
   UnauthorizedException,
 } from '@nestjs/common';
 import { WorkOSService } from './workos.service';
@@ -14,29 +14,18 @@ export class AuthGuard implements CanActivate {
     const request = context.switchToHttp().getRequest();
     const cookie = request.cookies['wos-session'];
 
-    if (!cookie)
-      throw new UnauthorizedException('No session found');
+    if (!cookie) throw new UnauthorizedException('No session found');
 
     const session = await this.workosService.loadSealedSession(cookie);
 
-    if (!session)
-      throw new UnauthorizedException('Invalid session');
+    if (!session) throw new UnauthorizedException('Invalid session');
 
-    // Check if session is expired
-    if (new Date() < new Date()) {
+    const authResponse = await session.authenticate();
 
+    if (!authResponse.authenticated)
+      throw new UnauthorizedException('Session not authenticated');
 
-
-      try {
-       await session.refresh();
-
-        return true;
-      } catch (error) {
-        throw new UnauthorizedException('Session expired');
-      }
-    }
-
-    // request.user = session.user;
+    request.user = authResponse.user;
     return true;
   }
 }

@@ -1,5 +1,6 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { WorkOS } from '@workos-inc/node';
+import { CookieSession } from '@workos-inc/node/lib/user-management/session';
 
 @Injectable()
 export class WorkOSService {
@@ -8,7 +9,9 @@ export class WorkOSService {
 
   constructor() {
     this.clientId = process.env.WORKOS_CLIENT_ID;
-    this.workos = new WorkOS(process.env.WORKOS_API_KEY, { clientId: this.clientId });
+    this.workos = new WorkOS(process.env.WORKOS_API_KEY, {
+      clientId: this.clientId,
+    });
   }
 
   getAuthorizationUrl(state?: string) {
@@ -27,29 +30,21 @@ export class WorkOSService {
       session: {
         sealSession: true,
         cookiePassword: process.env.WORKOS_COOKIE_PASSWORD,
-      }
+      },
     });
   }
 
-  async getUser(accessToken: string) {
-    return await this.workos.userManagement.getUser(accessToken);
+  async getUser(session: CookieSession) {
+    const authResponse = await session.authenticate();
+
+    if (!authResponse.authenticated)
+      throw new UnauthorizedException('Session not authenticated');
+
+    return authResponse.user;
   }
 
-  async refreshToken(refreshToken: string) {
-    return await this.workos.userManagement.authenticateWithRefreshToken({
-      refreshToken,
-      clientId: this.clientId,
-    });
-  }
-
-  getLogoutUrl() {
-    return this.workos.userManagement.getLogoutUrl({
-      sessionId: 'session_id', // This will be replaced with actual session ID
-    });
-  }
-
-  async loadSealedSession(sessionData: string) {
-    return await this.workos.userManagement.loadSealedSession({
+  loadSealedSession(sessionData: string) {
+    return this.workos.userManagement.loadSealedSession({
       sessionData,
       cookiePassword: process.env.WORKOS_COOKIE_PASSWORD,
     });

@@ -1,6 +1,6 @@
-import { HttpClient, HttpParams } from "@angular/common/http";
-import { inject, Injectable } from "@angular/core";
-import { BehaviorSubject, Observable, tap } from "rxjs";
+import { HttpClient, HttpParams } from '@angular/common/http';
+import { inject, Injectable } from '@angular/core';
+import { BehaviorSubject, catchError, Observable, of, tap } from 'rxjs';
 
 export interface User {
   id: string;
@@ -8,7 +8,6 @@ export interface User {
   firstName?: string;
   lastName?: string;
 }
-
 
 @Injectable({
   providedIn: 'root',
@@ -26,9 +25,13 @@ export class AuthService {
   getLoginUrl(state?: string): Observable<{ url: string }> {
     const params = new HttpParams({ fromObject: state ? { state } : {} });
 
-    return this.http.get<{ url: string }>(`${this.apiUrl}/login`, { params }).pipe(tap((response) => {
-      console.log({response})
-    }));
+    return this.http
+      .get<{ url: string }>(`${this.apiUrl}/login`, { params })
+      .pipe(
+        tap((response) => {
+          console.log({ response });
+        }),
+      );
   }
 
   handleCallback(code: string): Observable<{ user: User }> {
@@ -40,17 +43,27 @@ export class AuthService {
       .pipe(
         tap((response) => {
           this.userSubject.next(response.user);
-        })
+        }),
       );
   }
 
-  checkAuth(): void {
-    this.http
+  checkAuth(): Observable<User | null> {
+    return this.http
       .get<User>(`${this.apiUrl}/me`, { withCredentials: true })
-      .subscribe({
-        next: (user) => this.userSubject.next(user),
-        error: () => this.userSubject.next(null),
-      });
+      .pipe(
+        tap((user) => {
+          this.userSubject.next(user);
+
+          console.log({ user });
+
+          return user;
+        }),
+        catchError(() => {
+          this.userSubject.next(null);
+
+          return of(null);
+        }),
+      );
   }
 
   logout(): Observable<{ url: string }> {
@@ -61,7 +74,7 @@ export class AuthService {
       .pipe(
         tap(() => {
           this.userSubject.next(null);
-        })
+        }),
       );
   }
 
