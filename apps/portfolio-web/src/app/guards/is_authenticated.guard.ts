@@ -17,14 +17,18 @@ export class IsAuthenticatedGuard implements CanActivate, CanActivateChild {
   }
 
   private checkAuth() {
+    console.log('is authenticated');
     return this.authService.user$.pipe(
       take(1),
       switchMap((user) => {
+        console.log('here');
         if (user !== null) return of(!!user);
 
         return this.authService.checkAuth().pipe(map((user) => !!user));
       }),
       map((isAuthenticated) => {
+        console.log({ isAuthenticated });
+
         if (isAuthenticated) return true;
 
         this.router.navigate(['/login']);

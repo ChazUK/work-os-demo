@@ -1,6 +1,7 @@
 import { Route } from '@angular/router';
+import { CallbackRedirectGuard } from './guards/callback-redirect.guard';
 import { IsAuthenticatedGuard } from './guards/is_authenticated.guard';
-import { LoginRedirectGuard } from './guards/login-redirect-guard';
+import { LoginRedirectGuard } from './guards/login-redirect.guard';
 import { LogoutRedirectGuard } from './guards/logout-redirect.guard';
 
 export const appRoutes: Route[] = [
@@ -22,6 +23,11 @@ export const appRoutes: Route[] = [
       {
         path: 'login',
         canActivate: [LoginRedirectGuard],
+        children: [],
+      },
+      {
+        path: 'callback',
+        canActivate: [CallbackRedirectGuard],
         children: [],
       },
     ],

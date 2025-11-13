@@ -1,13 +1,28 @@
 import { DOCUMENT, inject, Injectable } from '@angular/core';
-import { CanActivate } from '@angular/router';
+import { CanActivate, Router } from '@angular/router';
+import { catchError, map, Observable, of } from 'rxjs';
+import { AuthService } from '../services/auth.service';
 
 @Injectable({ providedIn: 'root' })
 export class LogoutRedirectGuard implements CanActivate {
+  private router = inject(Router);
   private document = inject(DOCUMENT);
+  private authService = inject(AuthService);
 
-  canActivate(): boolean {
-    this.document.location.href = 'http://portfolio-api.test/auth/logout';
+  canActivate(): Observable<boolean> {
+    return this.authService.logout().pipe(
+      map(({ logoutUrl }) => {
+        this.document.location.href = logoutUrl;
 
-    return false;
+        return false;
+      }),
+      catchError((error) => {
+        console.error(error);
+
+        this.router.navigate(['/dashboard']);
+
+        return of(false);
+      }),
+    );
   }
 }

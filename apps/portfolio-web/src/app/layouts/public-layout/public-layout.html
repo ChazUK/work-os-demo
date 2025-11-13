@@ -3,7 +3,12 @@
     <a routerLink="/">Portfolio</a>
     <a routerLink="/">Home</a>
     <a routerLink="/about">About</a>
+    @if (user$ | async; as user) {
+    <a routerLink="/dashboard">Dashboard</a>
+    <a routerLink="/logout">Logout</a>
+    } @else {
     <a routerLink="/login">Login</a>
+    }
   </nav>
 </header>
 
@@ -12,5 +17,7 @@
 </main>
 
 <footer>
-  <p class="container">&copy; 2024 Portfolio. Premium Landlord Property Management Platform by NRLA</p>
+  <p class="container">
+    &copy; 2024 Portfolio. Premium Landlord Property Management Platform by NRLA
+  </p>
 </footer>

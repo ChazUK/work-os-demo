@@ -1,12 +1,14 @@
-import { provideHttpClient, withInterceptors } from '@angular/common/http';
+import { provideHttpClient } from '@angular/common/http';
 import {
+  APP_INITIALIZER,
   ApplicationConfig,
   provideBrowserGlobalErrorListeners,
   provideZoneChangeDetection,
 } from '@angular/core';
 import { provideRouter, withInMemoryScrolling } from '@angular/router';
+import { firstValueFrom } from 'rxjs';
 import { appRoutes } from './app.routes';
-import { credentialsInterceptor } from './http/credentials.inteceptor';
+import { AuthService } from './services/auth.service';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -19,6 +21,13 @@ export const appConfig: ApplicationConfig = {
         scrollPositionRestoration: 'enabled',
       }),
     ),
-    provideHttpClient(withInterceptors([credentialsInterceptor])),
+    provideHttpClient(),
+    {
+      provide: APP_INITIALIZER,
+      useFactory: (authService: AuthService) => () =>
+        firstValueFrom(authService.checkAuth()),
+      deps: [AuthService],
+      multi: true,
+    },
   ],
 };

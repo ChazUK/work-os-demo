@@ -1,19 +1,20 @@
+import { AsyncPipe } from '@angular/common';
 import { Component, inject } from '@angular/core';
-import { RouterOutlet, RouterLink } from '@angular/router';
-import { AuthService } from '../../services/auth.service';
+import { RouterLink, RouterOutlet } from '@angular/router';
 import { Observable } from 'rxjs';
+import { AuthService, User } from '../../services/auth.service';
 
 @Component({
   selector: 'app-public-layout',
-  imports: [RouterOutlet, RouterLink],
+  imports: [RouterOutlet, RouterLink, AsyncPipe],
   templateUrl: './public-layout.html',
   styleUrl: './public-layout.css',
 })
 export class PublicLayout {
   private authService = inject(AuthService);
-  public loginUrl$: Observable<{ url: string }>;
+  public user$: Observable<User | null>;
 
   constructor() {
-    this.loginUrl$ = this.authService.getLoginUrl();
+    this.user$ = this.authService.user$;
   }
 }

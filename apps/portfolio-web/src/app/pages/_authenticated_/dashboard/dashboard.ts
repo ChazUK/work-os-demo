@@ -1,5 +1,5 @@
-import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { Component, OnInit } from '@angular/core';
 
 interface Property {
   id: string;
@@ -31,7 +31,7 @@ interface DashboardMetrics {
   templateUrl: './dashboard.html',
   styleUrl: './dashboard.css',
 })
-export class Dashboard {
+export class Dashboard implements OnInit {
   metrics: DashboardMetrics = {
     totalProperties: 12,
     occupiedProperties: 10,
@@ -40,7 +40,7 @@ export class Dashboard {
     totalMonthlyRent: 14500,
     totalArrears: 2350,
     expiringCertificates: 3,
-    maintenanceIssues: 5
+    maintenanceIssues: 5,
   };
 
   properties: Property[] = [
@@ -54,7 +54,7 @@ export class Dashboard {
       tenancyStatus: 'occupied',
       nextInspection: new Date('2024-12-15'),
       complianceStatus: 'compliant',
-      arrears: 0
+      arrears: 0,
     },
     {
       id: '2',
@@ -66,7 +66,7 @@ export class Dashboard {
       tenancyStatus: 'occupied',
       nextInspection: new Date('2024-11-20'),
       complianceStatus: 'expiring-soon',
-      arrears: 1500
+      arrears: 1500,
     },
     {
       id: '3',
@@ -78,7 +78,7 @@ export class Dashboard {
       tenancyStatus: 'vacant',
       nextInspection: null,
       complianceStatus: 'compliant',
-      arrears: 0
+      arrears: 0,
     },
     {
       id: '4',
@@ -90,7 +90,7 @@ export class Dashboard {
       tenancyStatus: 'occupied',
       nextInspection: new Date('2024-12-01'),
       complianceStatus: 'compliant',
-      arrears: 0
+      arrears: 0,
     },
     {
       id: '5',
@@ -102,7 +102,7 @@ export class Dashboard {
       tenancyStatus: 'occupied',
       nextInspection: new Date('2025-01-10'),
       complianceStatus: 'compliant',
-      arrears: 0
+      arrears: 0,
     },
     {
       id: '6',
@@ -114,7 +114,7 @@ export class Dashboard {
       tenancyStatus: 'notice',
       nextInspection: new Date('2024-11-25'),
       complianceStatus: 'compliant',
-      arrears: 850
+      arrears: 850,
     },
     {
       id: '7',
@@ -126,7 +126,7 @@ export class Dashboard {
       tenancyStatus: 'occupied',
       nextInspection: new Date('2024-12-20'),
       complianceStatus: 'expired',
-      arrears: 0
+      arrears: 0,
     },
     {
       id: '8',
@@ -138,7 +138,7 @@ export class Dashboard {
       tenancyStatus: 'vacant',
       nextInspection: null,
       complianceStatus: 'compliant',
-      arrears: 0
+      arrears: 0,
     },
     {
       id: '9',
@@ -150,7 +150,7 @@ export class Dashboard {
       tenancyStatus: 'occupied',
       nextInspection: new Date('2024-11-30'),
       complianceStatus: 'compliant',
-      arrears: 0
+      arrears: 0,
     },
     {
       id: '10',
@@ -162,7 +162,7 @@ export class Dashboard {
       tenancyStatus: 'occupied',
       nextInspection: new Date('2024-12-05'),
       complianceStatus: 'expiring-soon',
-      arrears: 0
+      arrears: 0,
     },
     {
       id: '11',
@@ -174,7 +174,7 @@ export class Dashboard {
       tenancyStatus: 'occupied',
       nextInspection: new Date('2025-01-15'),
       complianceStatus: 'compliant',
-      arrears: 0
+      arrears: 0,
     },
     {
       id: '12',
@@ -186,35 +186,45 @@ export class Dashboard {
       tenancyStatus: 'occupied',
       nextInspection: new Date('2024-12-10'),
       complianceStatus: 'expiring-soon',
-      arrears: 0
-    }
+      arrears: 0,
+    },
   ];
 
   get occupancyRate(): number {
-    return Math.round((this.metrics.occupiedProperties / this.metrics.totalProperties) * 100);
+    return Math.round(
+      (this.metrics.occupiedProperties / this.metrics.totalProperties) * 100,
+    );
   }
 
   get propertiesWithArrears(): Property[] {
-    return this.properties.filter(p => p.arrears > 0);
+    return this.properties.filter((p) => p.arrears > 0);
   }
 
   get upcomingInspections(): Property[] {
     const thirtyDaysFromNow = new Date();
     thirtyDaysFromNow.setDate(thirtyDaysFromNow.getDate() + 30);
-    
+
     return this.properties
-      .filter(p => p.nextInspection && p.nextInspection <= thirtyDaysFromNow)
-      .sort((a, b) => (a.nextInspection?.getTime() || 0) - (b.nextInspection?.getTime() || 0));
+      .filter((p) => p.nextInspection && p.nextInspection <= thirtyDaysFromNow)
+      .sort(
+        (a, b) =>
+          (a.nextInspection?.getTime() || 0) -
+          (b.nextInspection?.getTime() || 0),
+      );
+  }
+
+  ngOnInit(): void {
+    console.log('Dashboard');
   }
 
   getStatusBadgeClass(status: string): string {
     const classes: { [key: string]: string } = {
-      'occupied': 'status-occupied',
-      'vacant': 'status-vacant',
-      'notice': 'status-notice',
-      'compliant': 'status-compliant',
+      occupied: 'status-occupied',
+      vacant: 'status-vacant',
+      notice: 'status-notice',
+      compliant: 'status-compliant',
       'expiring-soon': 'status-warning',
-      'expired': 'status-expired'
+      expired: 'status-expired',
     };
     return classes[status] || '';
   }
@@ -222,7 +232,7 @@ export class Dashboard {
   formatCurrency(amount: number): string {
     return new Intl.NumberFormat('en-GB', {
       style: 'currency',
-      currency: 'GBP'
+      currency: 'GBP',
     }).format(amount);
   }
 
@@ -231,7 +241,7 @@ export class Dashboard {
     return new Intl.DateTimeFormat('en-GB', {
       day: 'numeric',
       month: 'short',
-      year: 'numeric'
+      year: 'numeric',
     }).format(date);
   }
 }
