@@ -4,6 +4,6 @@ pre-commit:
   parallel: true
   jobs:
     - name: format
-      glob: '**/*.{html,css,json,md,scss,svg,js,ts,tsx,mjs,cjs,mts,xml,yml,yaml}'
+      glob: '**/*.{html,css,json,md,scss,svg,js,ts,tsx,mjs,cjs,mts,yml,yaml}'
       run: pnpm exec prettier --write {staged_files}
       stage_fixed: true
