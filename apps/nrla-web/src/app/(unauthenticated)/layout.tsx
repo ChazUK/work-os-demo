@@ -15,7 +15,7 @@ export default async function UnauthenticatedLayout({
   const { user } = await withAuth();
 
   return (
-    <div className="min-h-screen flex flex-col bg-gradient-to-b from-slate-950 to-slate-900 text-gray-200">
+    <div className="min-h-screen flex flex-col bg-linear-to-b from-slate-950 to-slate-900 text-gray-200">
       <header className="sticky top-0 z-10 bg-slate-900/80 backdrop-blur-sm border-b border-slate-700">
         <div className="max-w-6xl mx-auto flex items-center justify-between px-5 py-4">
           <Link href="/" className="font-bold tracking-wide text-blue-400">

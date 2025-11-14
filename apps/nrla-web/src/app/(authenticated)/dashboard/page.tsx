@@ -7,14 +7,14 @@ export default async function DashboardPage() {
   return (
     <div className="space-y-8">
       {/* Welcome Section */}
-      <section className="bg-gradient-to-r from-blue-500/10 to-blue-600/10 border border-blue-500/30 rounded-lg p-6">
+      <section className="bg-linear-to-r from-blue-500/10 to-blue-600/10 border border-blue-500/30 rounded-lg p-6">
         <h1 className="text-3xl font-bold text-white mb-2">
           Welcome back {user?.firstName || 'Member'}!
         </h1>
       </section>
 
       {/* Portfolio Service Stats Banner */}
-      <section className="bg-gradient-to-br from-slate-800 to-slate-900 border border-slate-700 rounded-lg p-6">
+      <section className="bg-linear-to-br from-slate-800 to-slate-900 border border-slate-700 rounded-lg p-6">
         <div className="flex items-center justify-between mb-6">
           <div>
             <h2 className="text-2xl font-bold text-white mb-1">
@@ -173,7 +173,7 @@ export default async function DashboardPage() {
           {/* Course 1 */}
           <div className="bg-slate-800/50 border border-slate-700 rounded-lg p-5 hover:border-blue-500/50 transition-colors group cursor-pointer">
             <div className="flex items-start gap-4">
-              <div className="w-12 h-12 bg-blue-500/10 rounded-lg flex items-center justify-center flex-shrink-0 group-hover:bg-blue-500/20 transition-colors">
+              <div className="w-12 h-12 bg-blue-500/10 rounded-lg flex items-center justify-center shrink-0 group-hover:bg-blue-500/20 transition-colors">
                 <svg
                   className="w-6 h-6 text-blue-400"
                   fill="none"
@@ -240,7 +240,7 @@ export default async function DashboardPage() {
           {/* Course 2 */}
           <div className="bg-slate-800/50 border border-slate-700 rounded-lg p-5 hover:border-blue-500/50 transition-colors group cursor-pointer">
             <div className="flex items-start gap-4">
-              <div className="w-12 h-12 bg-purple-500/10 rounded-lg flex items-center justify-center flex-shrink-0 group-hover:bg-purple-500/20 transition-colors">
+              <div className="w-12 h-12 bg-purple-500/10 rounded-lg flex items-center justify-center shrink-0 group-hover:bg-purple-500/20 transition-colors">
                 <svg
                   className="w-6 h-6 text-purple-400"
                   fill="none"
@@ -305,7 +305,7 @@ export default async function DashboardPage() {
           {/* Course 3 */}
           <div className="bg-slate-800/50 border border-slate-700 rounded-lg p-5 hover:border-blue-500/50 transition-colors group cursor-pointer">
             <div className="flex items-start gap-4">
-              <div className="w-12 h-12 bg-green-500/10 rounded-lg flex items-center justify-center flex-shrink-0 group-hover:bg-green-500/20 transition-colors">
+              <div className="w-12 h-12 bg-green-500/10 rounded-lg flex items-center justify-center shrink-0 group-hover:bg-green-500/20 transition-colors">
                 <svg
                   className="w-6 h-6 text-green-400"
                   fill="none"
@@ -370,7 +370,7 @@ export default async function DashboardPage() {
           {/* Course 4 */}
           <div className="bg-slate-800/50 border border-slate-700 rounded-lg p-5 hover:border-blue-500/50 transition-colors group cursor-pointer">
             <div className="flex items-start gap-4">
-              <div className="w-12 h-12 bg-orange-500/10 rounded-lg flex items-center justify-center flex-shrink-0 group-hover:bg-orange-500/20 transition-colors">
+              <div className="w-12 h-12 bg-orange-500/10 rounded-lg flex items-center justify-center shrink-0 group-hover:bg-orange-500/20 transition-colors">
                 <svg
                   className="w-6 h-6 text-orange-400"
                   fill="none"
