@@ -11,14 +11,12 @@ import {
   UnauthorizedException,
   UseGuards,
 } from '@nestjs/common';
+import { type SessionData } from '@work-os-demo/types';
 import { User } from '@workos-inc/node';
 import { Request, Response } from 'express';
 import { AuthGuard } from './auth.guard';
 import { GetAuthenticatedUser } from './decorators/authenticated-user.decorator';
-import {
-  GetSessionData,
-  type SessionData,
-} from './decorators/session-data.decorator';
+import { GetSessionData } from './decorators/session-data.decorator';
 import { SESSION_COOKIE_NAME, WorkOSService } from './workos.service';
 
 @Controller('auth')
@@ -113,10 +111,9 @@ export class AuthController {
   @Get('session')
   @UseGuards(AuthGuard)
   getSession(@GetSessionData() session: SessionData) {
+    this.logger.log(`Session: ${JSON.stringify(session)}`);
     return {
-      session: {
-        id: session.sessionId,
-      },
+      session,
     };
   }
 

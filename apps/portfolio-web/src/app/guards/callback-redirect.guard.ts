@@ -12,7 +12,10 @@ export class CallbackRedirectGuard implements CanActivate {
     const code = route.queryParamMap.get('code');
     const stateParam = route.queryParamMap.get('state');
 
-    console.log({ code, state: stateParam });
+    console.log(
+      '[CallbackRedirectGuard]',
+      JSON.stringify({ code, state: stateParam }),
+    );
 
     if (!code) {
       this.router.navigate(['/login']);
@@ -22,14 +25,17 @@ export class CallbackRedirectGuard implements CanActivate {
 
     return this.authService.handleCallback({ code }).pipe(
       map((data) => {
-        console.log('handle callback', { data });
+        console.log(
+          '[CallbackRedirectGuard] handle callback',
+          JSON.stringify(data),
+        );
 
         this.router.navigate(['/dashboard']);
 
         return false;
       }),
       catchError((error) => {
-        console.error(error);
+        console.error('[CallbackRedirectGuard]', error);
 
         this.router.navigate(['/login']);
 

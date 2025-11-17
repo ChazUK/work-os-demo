@@ -1,0 +1,120 @@
+<div class="finance-page">
+  <section class="finance-header">
+    <div class="container">
+      <h1 class="page-title">Finance</h1>
+      <p class="page-subtitle">
+        Cashflow and performance across your portfolio
+      </p>
+    </div>
+  </section>
+
+  <section class="finance-summary">
+    <div class="container">
+      <div class="finance-summary-grid">
+        <div class="summary-card" *ngFor="let metric of financeSummary">
+          <div class="summary-label">{{ metric.label }}</div>
+          <div class="summary-value">{{ metric.value }}</div>
+          <div class="summary-trend" [ngClass]="getTrendClass(metric.trend)">
+            <span class="trend-indicator"></span>
+            <span class="trend-text">{{ metric.trendLabel }}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="finance-content">
+    <div class="container">
+      <div class="finance-content-grid">
+        <div class="cashflow-card">
+          <div class="card-header">
+            <h2 class="card-title">Monthly Cashflow</h2>
+            <p class="card-subtitle">
+              Income, expenses, and net position by month
+            </p>
+          </div>
+          <div class="cashflow-legend">
+            <div class="legend-item">
+              <span class="legend-swatch income-swatch"></span>
+              <span>Income</span>
+            </div>
+            <div class="legend-item">
+              <span class="legend-swatch expenses-swatch"></span>
+              <span>Expenses</span>
+            </div>
+          </div>
+          <div class="cashflow-chart">
+            <div class="cashflow-row" *ngFor="let month of monthlyCashflow">
+              <div class="cashflow-row-header">
+                <div class="cashflow-month">{{ month.month }}</div>
+                <div class="cashflow-amount">
+                  {{ formatCurrency(month.net) }}
+                </div>
+              </div>
+              <div class="cashflow-bars">
+                <div
+                  class="cashflow-bar income-bar"
+                  [style.width.%]="(month.income / maxIncome) * 100"
+                ></div>
+                <div
+                  class="cashflow-bar expenses-bar"
+                  [style.width.%]="(month.expenses / maxIncome) * 100"
+                ></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="property-finance-card">
+          <div class="card-header">
+            <h2 class="card-title">Property Performance</h2>
+            <p class="card-subtitle">
+              Net position, occupancy, and arrears by property
+            </p>
+          </div>
+          <div class="property-table-wrapper">
+            <table class="property-finance-table">
+              <thead>
+                <tr>
+                  <th>Property</th>
+                  <th>Monthly Rent</th>
+                  <th>Expenses</th>
+                  <th>Net</th>
+                  <th>Occupancy</th>
+                  <th>Arrears</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let property of propertyFinance">
+                  <td class="property-name">{{ property.name }}</td>
+                  <td>{{ formatCurrency(property.monthlyRent) }}</td>
+                  <td>{{ formatCurrency(property.expenses) }}</td>
+                  <td class="net-value">{{ formatCurrency(property.net) }}</td>
+                  <td>
+                    <div class="occupancy-bar-track">
+                      <div
+                        class="occupancy-bar-fill"
+                        [style.width.%]="property.occupancy"
+                      ></div>
+                    </div>
+                    <span class="occupancy-label"
+                      >{{ property.occupancy }}%</span
+                    >
+                  </td>
+                  <td>
+                    <span *ngIf="property.arrears > 0" class="arrears-value">
+                      {{ formatCurrency(property.arrears) }}
+                    </span>
+                    <span *ngIf="property.arrears === 0" class="no-arrears"
+                      >—</span
+                    >
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>

@@ -1,5 +1,6 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
+import { type SessionData } from '@work-os-demo/types';
 import { BehaviorSubject, catchError, map, Observable, of, tap } from 'rxjs';
 import { environment } from '../../environments/environment';
 
@@ -47,23 +48,29 @@ export class AuthService {
       );
   }
 
-  checkAuth(): Observable<boolean> {
-    console.log('check auth');
+  getSession(): Observable<{ session: SessionData }> {
+    return this.http
+      .get<{ session: SessionData }>(`${this.apiUrl}/session`, {
+        withCredentials: true,
+      })
+      .pipe(
+        tap(({ session }) => {
+          console.log('[AuthService] getSession', JSON.stringify(session));
+        }),
+      );
+  }
+
+  getUser(): Observable<User | null> {
     return this.http
       .get<{ user: User }>(`${this.apiUrl}/user`, { withCredentials: true })
       .pipe(
         map(({ user }) => {
-          console.log({ user });
-          if (user) {
-            this.userSubject.next(user);
+          if (user) this.userSubject.next(user);
 
-            return true;
-          }
-
-          return false;
+          return user;
         }),
         catchError(() => {
-          return of(false);
+          return of(null);
         }),
       );
   }

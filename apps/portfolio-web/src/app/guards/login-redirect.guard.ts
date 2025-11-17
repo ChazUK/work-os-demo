@@ -10,11 +10,11 @@ export class LoginRedirectGuard implements CanActivate {
   constructor() {
     this.authService.getLoginUrl().subscribe({
       next: (data: any) => {
-        console.log({ data });
+        console.log('[LoginRedirectGuard]', JSON.stringify(data));
         this.document.location.href = data.authorizationUrl;
       },
       error: (error) => {
-        console.error(error);
+        console.error('[LoginRedirectGuard]', error);
       },
     });
   }

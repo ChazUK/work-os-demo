@@ -34,17 +34,25 @@ export const appRoutes: Route[] = [
   },
   {
     path: '',
+    canActivateChild: [IsAuthenticatedGuard],
     loadComponent: () =>
       import('./layouts/authenticated-layout/authenticated-layout').then(
         (m) => m.AuthenticatedLayout,
       ),
-    canActivateChild: [IsAuthenticatedGuard],
     children: [
       {
         path: 'dashboard',
+
         loadComponent: () =>
           import('./pages/_authenticated_/dashboard/dashboard').then(
             (m) => m.Dashboard,
+          ),
+      },
+      {
+        path: 'finance',
+        loadComponent: () =>
+          import('./pages/_authenticated_/finance/finance').then(
+            (m) => m.Finance,
           ),
       },
     ],

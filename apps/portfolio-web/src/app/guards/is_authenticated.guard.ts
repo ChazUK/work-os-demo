@@ -1,6 +1,6 @@
 import { inject, Injectable } from '@angular/core';
 import { CanActivate, CanActivateChild, Router } from '@angular/router';
-import { catchError, map, of, switchMap, take } from 'rxjs';
+import { catchError, map, of, take } from 'rxjs';
 import { AuthService } from '../services/auth.service';
 
 @Injectable({ providedIn: 'root' })
@@ -17,17 +17,11 @@ export class IsAuthenticatedGuard implements CanActivate, CanActivateChild {
   }
 
   private checkAuth() {
-    console.log('is authenticated');
-    return this.authService.user$.pipe(
+    return this.authService.getSession().pipe(
       take(1),
-      switchMap((user) => {
-        console.log('here');
-        if (user !== null) return of(!!user);
-
-        return this.authService.checkAuth().pipe(map((user) => !!user));
-      }),
+      map(({ session }) => !!session.authenticated),
       map((isAuthenticated) => {
-        console.log({ isAuthenticated });
+        console.log('[IsAuthenticatedGuard]', JSON.stringify(isAuthenticated));
 
         if (isAuthenticated) return true;
 
@@ -36,7 +30,7 @@ export class IsAuthenticatedGuard implements CanActivate, CanActivateChild {
         return false;
       }),
       catchError((error) => {
-        console.log({ error });
+        console.error('[IsAuthenticatedGuard]', error);
         this.router.navigate(['/login']);
 
         return of(false);

@@ -1,11 +1,7 @@
 import { Controller, Get, UseGuards } from '@nestjs/common';
+import { type SessionData } from '@work-os-demo/types';
 import { User } from '@workos-inc/node';
-import {
-  AuthGuard,
-  GetAuthenticatedUser,
-  GetSessionData,
-  type SessionData,
-} from '../auth';
+import { AuthGuard, GetAuthenticatedUser, GetSessionData } from '../auth';
 
 /**
  * Example controller demonstrating how to protect routes

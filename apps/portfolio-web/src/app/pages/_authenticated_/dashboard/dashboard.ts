@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 
 interface Property {
   id: string;
@@ -31,7 +31,7 @@ interface DashboardMetrics {
   templateUrl: './dashboard.html',
   styleUrl: './dashboard.css',
 })
-export class Dashboard implements OnInit {
+export class Dashboard {
   metrics: DashboardMetrics = {
     totalProperties: 12,
     occupiedProperties: 10,
@@ -211,10 +211,6 @@ export class Dashboard implements OnInit {
           (a.nextInspection?.getTime() || 0) -
           (b.nextInspection?.getTime() || 0),
       );
-  }
-
-  ngOnInit(): void {
-    console.log('Dashboard');
   }
 
   getStatusBadgeClass(status: string): string {

@@ -1,14 +1,26 @@
 import { provideHttpClient } from '@angular/common/http';
 import {
-  APP_INITIALIZER,
   ApplicationConfig,
+  inject,
+  provideAppInitializer,
   provideBrowserGlobalErrorListeners,
   provideZoneChangeDetection,
 } from '@angular/core';
 import { provideRouter, withInMemoryScrolling } from '@angular/router';
-import { firstValueFrom } from 'rxjs';
+import { firstValueFrom, of } from 'rxjs';
 import { appRoutes } from './app.routes';
 import { AuthService } from './services/auth.service';
+
+const intializeAppFn = async () => {
+  const authService = inject(AuthService);
+  try {
+    const { session } = await firstValueFrom(authService.getSession());
+
+    if (session.authenticated) await firstValueFrom(authService.getUser());
+  } catch (_error) {}
+
+  return of(null);
+};
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -22,12 +34,6 @@ export const appConfig: ApplicationConfig = {
       }),
     ),
     provideHttpClient(),
-    {
-      provide: APP_INITIALIZER,
-      useFactory: (authService: AuthService) => () =>
-        firstValueFrom(authService.checkAuth()),
-      deps: [AuthService],
-      multi: true,
-    },
+    provideAppInitializer(intializeAppFn),
   ],
 };
