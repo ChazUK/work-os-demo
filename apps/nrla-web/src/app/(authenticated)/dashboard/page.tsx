@@ -153,6 +153,60 @@ export default async function DashboardPage() {
         </div>
       </section>
 
+      {/* Outstanding Certificates Section */}
+      <section className="bg-slate-800/50 border border-slate-700 rounded-lg p-6">
+        <div className="flex items-center justify-between mb-4">
+          <div>
+            <h2 className="text-2xl font-bold text-white mb-1">
+              Outstanding Certificates
+            </h2>
+            <p className="text-sm text-gray-400">
+              Stay on top of upcoming renewals and compliance deadlines.
+            </p>
+          </div>
+          <a
+            href="http://localhost:8000/dashboard"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-sm text-blue-400 hover:text-blue-300 transition-colors"
+          >
+            Manage certificates →
+          </a>
+        </div>
+
+        <div className="grid md:grid-cols-3 gap-4">
+          <div className="bg-slate-900/60 border border-slate-700 rounded-lg p-4">
+            <p className="text-sm font-semibold text-white mb-1">
+              Gas Safety Certificates
+            </p>
+            <p className="text-xs text-orange-400 mb-1">Due within 30 days</p>
+            <p className="text-xs text-gray-400">
+              3 properties require updated gas safety checks.
+            </p>
+          </div>
+
+          <div className="bg-slate-900/60 border border-slate-700 rounded-lg p-4">
+            <p className="text-sm font-semibold text-white mb-1">
+              EICR (Electrical Safety)
+            </p>
+            <p className="text-xs text-orange-400 mb-1">
+              1 certificate overdue
+            </p>
+            <p className="text-xs text-gray-400">
+              Review and upload the latest electrical inspection report.
+            </p>
+          </div>
+
+          <div className="bg-slate-900/60 border border-slate-700 rounded-lg p-4">
+            <p className="text-sm font-semibold text-white mb-1">EPC Ratings</p>
+            <p className="text-xs text-green-400 mb-1">All valid</p>
+            <p className="text-xs text-gray-400">
+              No immediate action required, monitor for upcoming expiries.
+            </p>
+          </div>
+        </div>
+      </section>
+
       {/* Training Courses Section */}
       <section>
         <div className="flex items-center justify-between mb-4">
