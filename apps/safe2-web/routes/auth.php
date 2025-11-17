@@ -14,5 +14,5 @@ Route::get('authenticate', function (AuthKitAuthenticationRequest $request) {
 })->middleware(['guest']);
 
 Route::post('logout', function (AuthKitLogoutRequest $request) {
-    return $request->logout();
+    return $request->logout('http://localhost:8000');
 })->middleware(['auth'])->name('logout');

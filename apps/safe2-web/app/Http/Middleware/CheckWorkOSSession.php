@@ -22,6 +22,10 @@ class CheckWorkOSSession
      */
     public function handle(Request $request, Closure $next): Response
     {
+        Log::info('CheckWorkOSSession middleware handle function called', [
+            'user_id' => Auth::id(),
+        ]);
+
         // Only check session if user is currently authenticated in Laravel
         if (Auth::check()) {
             try {
