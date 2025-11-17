@@ -35,12 +35,21 @@
                     </div>
 
                     <nav class="flex items-center gap-3 text-sm">
+                        @if(isset($user))
+                            <span class="text-slate-600">{{ $user['email'] }}</span>
+                        @endif
                         <a href="/" class="px-3 py-1.5 rounded border border-slate-200 text-slate-700 hover:bg-slate-50">
                             Marketing site
                         </a>
                         <span class="px-3 py-1.5 rounded bg-slate-900 text-white">
                             Dashboard
                         </span>
+                        <form method="POST" action="{{ route('logout') }}" class="inline">
+                            @csrf
+                            <button type="submit" class="px-3 py-1.5 rounded border border-red-200 text-red-700 hover:bg-red-50">
+                                Logout
+                            </button>
+                        </form>
                     </nav>
                 </div>
             </header>
@@ -49,7 +58,13 @@
                 <div class="max-w-5xl mx-auto px-6 py-8 space-y-6">
                     <div class="flex items-start justify-between gap-4">
                         <div>
-                            <h1 class="text-2xl font-semibold tracking-tight text-slate-900">Your certificates</h1>
+                            <h1 class="text-2xl font-semibold tracking-tight text-slate-900">
+                                @if(isset($user) && isset($user['first_name']))
+                                    Welcome back, {{ $user['first_name'] }}
+                                @else
+                                    Your certificates
+                                @endif
+                            </h1>
                             <p class="text-sm text-slate-600 mt-1">Overview of your active and upcoming compliance across properties.</p>
                         </div>
                         <div class="flex items-center gap-2 text-xs text-slate-500">

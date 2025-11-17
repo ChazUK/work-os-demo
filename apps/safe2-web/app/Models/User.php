@@ -21,6 +21,9 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'workos_id',
+        'email_verified_at',
+        'avatar',
     ];
 
     /**

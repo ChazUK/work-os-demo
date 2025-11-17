@@ -11,7 +11,10 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware): void {
-        //
+        // Register global middleware that checks WorkOS session on every request
+        $middleware->web(append: [
+            \App\Http\Middleware\CheckWorkOSSession::class,
+        ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         //

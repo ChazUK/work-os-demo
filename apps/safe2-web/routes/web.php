@@ -1,15 +1,22 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use Laravel\WorkOS\Http\Middleware\ValidateSessionWithWorkOS;
 
 Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('/login', function () {
-    return view('login');
+// Include WorkOS authentication routes
+require __DIR__.'/auth.php';
+
+// Protected routes
+Route::middleware([
+    'auth',
+    ValidateSessionWithWorkOS::class,
+])->group(function () {
+    Route::get('/dashboard', function () {
+        return view('dashboard', ['user' => auth()->user()]);
+    })->name('dashboard');
 });
 
-Route::get('/dashboard', function () {
-    return view('dashboard');
-});
