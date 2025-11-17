@@ -12,7 +12,9 @@ export class LogoutRedirectGuard implements CanActivate {
   canActivate(): Observable<boolean> {
     return this.authService.logout().pipe(
       map(({ logoutUrl }) => {
-        this.document.location.href = logoutUrl;
+        if (logoutUrl) this.document.location.href = logoutUrl;
+
+        this.router.navigate(['/dashboard']);
 
         return false;
       }),

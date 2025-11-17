@@ -5,8 +5,6 @@ export const GetSessionData = createParamDecorator(
   (_data: unknown, ctx: ExecutionContext): SessionData => {
     const request = ctx.switchToHttp().getRequest();
 
-    console.log(`Session: ${JSON.stringify(request)}`);
-
     return request.sessionData;
   },
 );

@@ -20,8 +20,6 @@ export class AuthService {
   private http = inject(HttpClient);
   public user$ = this.userSubject.asObservable();
 
-  constructor() {}
-
   getLoginUrl(state?: string): Observable<{ url: string }> {
     const params = new HttpParams({ fromObject: state ? { state } : {} });
 
@@ -39,7 +37,6 @@ export class AuthService {
     return this.http
       .get<{ user: User; redirectUrl: string }>(`${this.apiUrl}/callback`, {
         params: { code },
-        withCredentials: true,
       })
       .pipe(
         tap(({ user }) => {
@@ -50,9 +47,7 @@ export class AuthService {
 
   getSession(): Observable<{ session: SessionData }> {
     return this.http
-      .get<{ session: SessionData }>(`${this.apiUrl}/session`, {
-        withCredentials: true,
-      })
+      .get<{ session: SessionData }>(`${this.apiUrl}/session`)
       .pipe(
         tap(({ session }) => {
           console.log('[AuthService] getSession', JSON.stringify(session));
@@ -61,34 +56,30 @@ export class AuthService {
   }
 
   getUser(): Observable<User | null> {
-    return this.http
-      .get<{ user: User }>(`${this.apiUrl}/user`, { withCredentials: true })
-      .pipe(
-        map(({ user }) => {
-          if (user) this.userSubject.next(user);
+    return this.http.get<{ user: User }>(`${this.apiUrl}/user`).pipe(
+      map(({ user }) => {
+        if (user) this.userSubject.next(user);
 
-          return user;
-        }),
-        catchError(() => {
-          return of(null);
-        }),
-      );
+        return user;
+      }),
+      catchError(() => {
+        return of(null);
+      }),
+    );
   }
 
   logout(): Observable<{ logoutUrl: string }> {
     return this.http
-      .post<{ logoutUrl: string }>(
-        `${this.apiUrl}/logout`,
-        {},
-        {
-          withCredentials: true,
-        },
-      )
+      .post<{ logoutUrl: string }>(`${this.apiUrl}/logout`, {})
       .pipe(
         tap(() => {
-          this.userSubject.next(null);
+          this.clearUser();
         }),
       );
+  }
+
+  clearUser(): void {
+    this.userSubject.next(null);
   }
 
   isAuthenticated(): boolean {

@@ -2,5 +2,5 @@ import { type AuthenticateWithSessionCookieSuccessResponse } from '@workos-inc/n
 
 export type SessionData = Omit<
   AuthenticateWithSessionCookieSuccessResponse,
-  'user'
+  'user' | 'accessToken'
 >;

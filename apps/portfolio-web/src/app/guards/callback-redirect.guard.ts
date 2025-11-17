@@ -10,37 +10,25 @@ export class CallbackRedirectGuard implements CanActivate {
 
   canActivate(route: ActivatedRouteSnapshot): boolean | Observable<boolean> {
     const code = route.queryParamMap.get('code');
-    const stateParam = route.queryParamMap.get('state');
+    const state = route.queryParamMap.get('state');
 
-    console.log(
-      '[CallbackRedirectGuard]',
-      JSON.stringify({ code, state: stateParam }),
-    );
-
-    if (!code) {
-      this.router.navigate(['/login']);
-
-      return false;
-    }
+    if (!code) return this.navigateToLogin();
 
     return this.authService.handleCallback({ code }).pipe(
-      map((data) => {
-        console.log(
-          '[CallbackRedirectGuard] handle callback',
-          JSON.stringify(data),
-        );
-
-        this.router.navigate(['/dashboard']);
+      map(() => {
+        this.router.navigate(state ? [state] : ['/dashboard']);
 
         return false;
       }),
-      catchError((error) => {
-        console.error('[CallbackRedirectGuard]', error);
-
-        this.router.navigate(['/login']);
-
-        return of(false);
+      catchError(() => {
+        return this.navigateToLogin();
       }),
     );
+  }
+
+  private navigateToLogin(): Observable<boolean> {
+    this.router.navigate(['/login']);
+
+    return of(false);
   }
 }

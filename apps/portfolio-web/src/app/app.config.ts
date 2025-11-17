@@ -1,4 +1,5 @@
-import { provideHttpClient } from '@angular/common/http';
+import { DOCUMENT } from '@angular/common';
+import { provideHttpClient, withInterceptors } from '@angular/common/http';
 import {
   ApplicationConfig,
   inject,
@@ -9,10 +10,16 @@ import {
 import { provideRouter, withInMemoryScrolling } from '@angular/router';
 import { firstValueFrom, of } from 'rxjs';
 import { appRoutes } from './app.routes';
+import { authInterceptor } from './http/auth.interceptor';
 import { AuthService } from './services/auth.service';
 
 const intializeAppFn = async () => {
   const authService = inject(AuthService);
+  const document = inject(DOCUMENT);
+  const url = new URL(document.location.href);
+
+  if (url.pathname === '/callback') return of(null);
+
   try {
     const { session } = await firstValueFrom(authService.getSession());
 
@@ -33,7 +40,7 @@ export const appConfig: ApplicationConfig = {
         scrollPositionRestoration: 'enabled',
       }),
     ),
-    provideHttpClient(),
+    provideHttpClient(withInterceptors([authInterceptor])),
     provideAppInitializer(intializeAppFn),
   ],
 };

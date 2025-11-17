@@ -29,6 +29,7 @@ export class AuthGuard implements CanActivate {
 
       if (!sessionData) {
         this.logger.warn('No session cookie found');
+
         throw new UnauthorizedException('No active session');
       }
 
@@ -38,17 +39,18 @@ export class AuthGuard implements CanActivate {
 
       // Attach user and session info to request for use in controllers
       request['user'] = authResult.user;
-      request['sessionId'] = authResult.sessionId;
-      request['organizationId'] = authResult.organizationId;
-      request['role'] = authResult.role;
-      request['permissions'] = authResult.permissions;
-      request['entitlements'] = authResult.entitlements;
-      request['impersonator'] = authResult.impersonator;
+      request['sessionData'] = {
+        authenticated: true,
+        sessionId: authResult.sessionId,
+        organizationId: authResult.organizationId,
+        role: authResult.role,
+        permissions: authResult.permissions,
+        entitlements: authResult.entitlements,
+        impersonator: authResult.impersonator,
+      };
 
       return true;
     } catch (error) {
-      this.logger.error('Authentication failed', error);
-
       // Clear invalid session cookie
       this.workosService.clearSessionCookie(response);
 
