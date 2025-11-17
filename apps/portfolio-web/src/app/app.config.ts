@@ -21,9 +21,7 @@ const intializeAppFn = async () => {
   if (url.pathname === '/callback') return of(null);
 
   try {
-    const { session } = await firstValueFrom(authService.getSession());
-
-    if (session.authenticated) await firstValueFrom(authService.getUser());
+    await firstValueFrom(authService.getUser());
   } catch (_error) {}
 
   return of(null);

@@ -1,6 +1,5 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
-import { type SessionData } from '@work-os-demo/types';
 import { BehaviorSubject, catchError, map, Observable, of, tap } from 'rxjs';
 import { environment } from '../../environments/environment';
 
@@ -41,16 +40,6 @@ export class AuthService {
       .pipe(
         tap(({ user }) => {
           this.userSubject.next(user);
-        }),
-      );
-  }
-
-  getSession(): Observable<{ session: SessionData }> {
-    return this.http
-      .get<{ session: SessionData }>(`${this.apiUrl}/session`)
-      .pipe(
-        tap(({ session }) => {
-          console.log('[AuthService] getSession', JSON.stringify(session));
         }),
       );
   }

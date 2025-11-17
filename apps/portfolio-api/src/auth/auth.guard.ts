@@ -35,18 +35,64 @@ export class AuthGuard implements CanActivate {
 
       // Load and authenticate session
       const session = this.workosService.loadSealedSession(sessionData);
-      const authResult = await this.workosService.authenticateSession(session);
+      const authResponse = await session.authenticate();
+
+      if (!authResponse.authenticated) {
+        try {
+          // Attempt to refresh the session when it is invalid or expired
+          const refreshResponse = await session.refresh();
+
+          if (!refreshResponse.authenticated) {
+            this.logger.warn('Session refresh failed: still unauthenticated');
+
+            throw new UnauthorizedException('Authentication required');
+          }
+
+          // Update session cookie with refreshed sealed session
+          this.workosService.setSessionCookie(
+            response,
+            refreshResponse.sealedSession,
+          );
+
+          // Re-authenticate with refreshed session to get user and claims
+          const refreshedAuthResponse = await session.authenticate();
+
+          if (!refreshedAuthResponse.authenticated) {
+            this.logger.warn('Re-authentication after refresh failed');
+
+            throw new UnauthorizedException('Authentication required');
+          }
+
+          // Attach user and session info to request for use in controllers
+          request['user'] = refreshedAuthResponse.user;
+          request['sessionData'] = {
+            authenticated: true,
+            sessionId: refreshedAuthResponse.sessionId,
+            organizationId: refreshedAuthResponse.organizationId,
+            role: refreshedAuthResponse.role,
+            permissions: refreshedAuthResponse.permissions,
+            entitlements: refreshedAuthResponse.entitlements,
+            impersonator: refreshedAuthResponse.impersonator,
+          };
+
+          return true;
+        } catch (error) {
+          this.logger.error('Session refresh failed', error);
+
+          throw new UnauthorizedException('Authentication required');
+        }
+      }
 
       // Attach user and session info to request for use in controllers
-      request['user'] = authResult.user;
+      request['user'] = authResponse.user;
       request['sessionData'] = {
         authenticated: true,
-        sessionId: authResult.sessionId,
-        organizationId: authResult.organizationId,
-        role: authResult.role,
-        permissions: authResult.permissions,
-        entitlements: authResult.entitlements,
-        impersonator: authResult.impersonator,
+        sessionId: authResponse.sessionId,
+        organizationId: authResponse.organizationId,
+        role: authResponse.role,
+        permissions: authResponse.permissions,
+        entitlements: authResponse.entitlements,
+        impersonator: authResponse.impersonator,
       };
 
       return true;
