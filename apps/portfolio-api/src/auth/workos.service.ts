@@ -17,8 +17,16 @@ export class WorkOSService {
     this.clientId = process.env.WORKOS_CLIENT_ID;
     this.cookiePassword = process.env.WORKOS_COOKIE_PASSWORD;
 
-    if (!this.clientId || !this.cookiePassword || !process.env.WORKOS_API_KEY)
-      throw new Error('Missing required WorkOS environment variables');
+    if (!this.clientId)
+      throw new Error('Missing required WorkOS Client ID environment variable');
+
+    if (!this.cookiePassword)
+      throw new Error(
+        'Missing required WorkOS Cookie Password environment variable',
+      );
+
+    if (!process.env.WORKOS_API_KEY)
+      throw new Error('Missing required WorkOS API Key environment variable');
 
     this.workos = new WorkOS(process.env.WORKOS_API_KEY, {
       clientId: this.clientId,
