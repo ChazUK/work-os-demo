@@ -45,6 +45,8 @@ Thumbs.db
 
 .angular
 
+.env
+
 # Next.js
 .next
 out
