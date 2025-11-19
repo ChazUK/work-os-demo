@@ -3,6 +3,10 @@
     <a routerLink="/">Portfolio</a>
     <a routerLink="/dashboard">Dashboard</a>
     <a routerLink="/finance">Finance</a>
+
+    @if (user$ | async; as user) {
+    <span>Welcome, {{ user.firstName }} {{ user.lastName }}</span>
+    }
     <a routerLink="/logout">Logout</a>
   </nav>
 </header>
