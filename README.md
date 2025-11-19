@@ -1,53 +1,99 @@
-# WorkOs Demo
+# WorkOS Demo
 
+This monorepo contains three applications demonstrating WorkOS integration:
 
-Add the following to /etc/hosts
+- **Portfolio Web** (Angular) - Frontend application
+- **Portfolio API** (NestJS) - Backend API
+- **NRLA Web** (Next.js) - Next.js application
+- **Safe2 Web** (Laravel) - Laravel application
 
-```
-127.0.0.1       portfolio.site
-127.0.0.1       portfolio.api
-127.0.0.1       nrla.site
-```
+## Prerequisites
 
-Install nginx via brew
+Before setting up the project, ensure you have the following installed:
 
-run `sudo nginx -t` to find the nginx.conf
+- **Node.js** (v18 or higher recommended)
+- **pnpm** - Install via `npm install -g pnpm` or `brew install pnpm`
+- **PHP** (v8.1 or higher) - Install via `brew install php`
+- **Composer** - Install via `brew install composer`
 
-Add the following to nginx.conf
+## Installation
 
-```
-server {
-    listen 80;
-    server_name portfolio.site;
+1. Clone the repository
+2. Install Node.js dependencies:
 
-    location / {
-        proxy_pass http://localhost:4200;
-        proxy_set_header Host $host;
-        proxy_set_header X-Real-IP $remote_addr;
-    }
-}
+   ```bash
+   pnpm install
+   ```
 
-server {
-    listen 80;
-    server_name portfolio.api;
+3. Install PHP dependencies for Laravel app:
 
-    location / {
-        proxy_pass http://localhost:4201;
-        proxy_set_header Host $host;
-        proxy_set_header X-Real-IP $remote_addr;
-    }
-}
+   ```bash
+   cd apps/safe2-web
+   composer install
+   cd ../..
+   ```
 
-server {
-    listen 80;
-    server_name nrla.site;
+4. Set up environment variables:
+   - Copy `.env.example` files to `.env` in each app directory
+   - Configure WorkOS credentials and other required variables
 
-    location / {
-        proxy_pass http://localhost:3000;
-        proxy_set_header Host $host;
-        proxy_set_header X-Real-IP $remote_addr;
-    }
-}
+## Running the Applications
+
+### Angular & NestJS Apps (Portfolio Web + Portfolio API)
+
+Run both the Angular frontend and NestJS backend:
+
+```bash
+pnpm nx run-many -t serve
 ```
 
-run `sudo brew services restart nginx`
+- Portfolio Web (Angular) will be available at: http://portfolio.site (proxied from localhost:4200)
+- Portfolio API (NestJS) will be available at: http://portfolio.api (proxied from localhost:4201)
+
+### Next.js App (NRLA Web)
+
+Run the Next.js application:
+
+```bash
+pnpm nx dev nrla-web
+```
+
+- NRLA Web will be available at: http://nrla.site (proxied from localhost:3000)
+
+### Laravel App (Safe2 Web)
+
+Run the Laravel application:
+
+```bash
+cd apps/safe2-web
+composer run dev
+```
+
+The Laravel app will run on its configured port.
+
+## Development
+
+### Running All Apps
+
+To run all applications simultaneously, open separate terminal windows/tabs:
+
+1. Terminal 1: `pnpm nx run-many -t serve` (Angular + NestJS)
+2. Terminal 2: `pnpm nx dev nrla-web` (Next.js)
+3. Terminal 3: `cd apps/safe2-web && composer run dev` (Laravel)
+
+### Project Structure
+
+This is an Nx monorepo with the following structure:
+
+- `apps/portfolio-web` - Angular application
+- `apps/portfolio-api` - NestJS API
+- `apps/nrla-web` - Next.js application
+- `apps/safe2-web` - Laravel application
+- `libs/types` - Shared TypeScript types
+
+## Troubleshooting
+
+- If nginx fails to start, check for port conflicts: `sudo lsof -i :80`
+- Ensure all `.env` files are properly configured with WorkOS credentials
+- For Laravel issues, check PHP version: `php -v`
+- For Node.js issues, verify pnpm installation: `pnpm -v`
